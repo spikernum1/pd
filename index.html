@@ -151,9 +151,7 @@ App.init = function() {
 	App.info = document.querySelector('#info');
 
 navigator.mediaDevices.getUserMedia({video: true})
-.then(async mediaStream => 
-  App.start;
-)
+.then(App.start)
 .catch(App.denied);
 
 	App.video.loop = App.video.muted = true;
