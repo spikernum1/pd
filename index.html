@@ -96,7 +96,13 @@ var App = {
 		}, true);
 		
 		var domURL = window.URL || window.webkitURL;
-		App.video.src = domURL ? domURL.createObjectURL(stream) : stream;
+		
+		try {
+  App.video.src = stream;
+} catch (error) {
+  App.video.src = window.URL.createObjectURL(stream);
+}
+
 	},
 	denied: function() {
 		App.info.innerHTML = 'Camera access denied!<br>Please reload and try again.';
