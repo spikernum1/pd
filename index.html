@@ -95,7 +95,12 @@ var App = {
 			}, 500);
 		}, true);
 		
-		App.video.src = stream;
+		if ("srcObject" in App.video) {
+		App.video.srcObject = stream;
+	  } else {
+		// Avoid using this in new browsers, as it is going away.
+		App.video.src = window.URL.createObjectURL(stream);
+	  }
 	},
 	denied: function() {
 		App.info.innerHTML = 'Camera access denied!<br>Please reload and try again.';
@@ -150,20 +155,14 @@ App.init = function() {
 	App.context = App.canvas.getContext('2d');
 	App.info = document.querySelector('#info');
 
-	try {
-		var stream = navigator.mediaDevices.getUserMedia({
-			video: true,
-			audio: false
-		});
-		App.start(stream);
-	} catch (e) {
-		try {
-			navigator.mediaDevices.getUserMedia('video', App.start, App.denied);
-		} catch (e) {
-			App.error(e);
-		}
-	}
-	
+navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+.then(function(stream) {
+  App.start(stream)
+})
+.catch(function(err) {
+  console.log(err.name + ": " + err.message);
+});
+
 	App.video.loop = App.video.muted = true;
 	App.video.load();
 };
