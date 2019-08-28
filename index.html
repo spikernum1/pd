@@ -70,7 +70,7 @@ body {
 var App = {
 	start: function(stream) {
 		App.video.addEventListener('canplay', function() {
-			App.video.removeEventListener('canplay');
+			App.video.removeEventListener('canplay', this);
 			setTimeout(function() {
 				App.video.play();
 				App.canvas.style.display = 'inline';
