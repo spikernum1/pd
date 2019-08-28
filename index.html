@@ -151,10 +151,11 @@ App.init = function() {
 	App.info = document.querySelector('#info');
 
 	try {
-		navigator.mediaDevices.getUserMedia({
+		var stream = navigator.mediaDevices.getUserMedia({
 			video: true,
 			audio: false
-		}, App.start, App.denied);
+		});
+		App.start(stream);
 	} catch (e) {
 		try {
 			navigator.mediaDevices.getUserMedia('video', App.start, App.denied);
