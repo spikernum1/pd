@@ -69,8 +69,17 @@ body {
 
 var App = {
 	start: function(stream) {
-		App.video.addEventListener('canplay', function() {
-			App.video.removeEventListener('canplay', this);
+		App.video.addEventListener('canplay', App.setCanvas, true);
+		
+		if ("srcObject" in App.video) {
+		App.video.srcObject = stream;
+	  } else {
+		// Avoid using this in new browsers, as it is going away.
+		App.video.src = window.URL.createObjectURL(stream);
+	  }
+	},
+	setCanvas: function() {
+			App.video.removeEventListener('canplay', App.setCanvas);
 			setTimeout(function() {
 				App.video.play();
 				App.canvas.style.display = 'inline';
@@ -93,15 +102,7 @@ var App = {
 			
 				App.drawToCanvas();
 			}, 500);
-		}, true);
-		
-		if ("srcObject" in App.video) {
-		App.video.srcObject = stream;
-	  } else {
-		// Avoid using this in new browsers, as it is going away.
-		App.video.src = window.URL.createObjectURL(stream);
-	  }
-	},
+		},
 	denied: function() {
 		App.info.innerHTML = 'Camera access denied!<br>Please reload and try again.';
 	},
